@@ -64,6 +64,7 @@ __attribute__((constructor)) static void PSTEnableUIKitDebugMode() {
     [[NSUserDefaults standardUserDefaults] aspect_hookSelector:@selector(persistentDomainForName:) withOptions:0 usingBlock:^(id<AspectInfo> info, NSString *domainName) {
         if ([domainName hasSuffix:@"com.apple.UIKit"]) {
             __autoreleasing NSDictionary *dictionary;
+            [[info originalInvocation] invoke];
             [[info originalInvocation] getReturnValue:&dictionary];
             NSMutableDictionary *mutable = [NSMutableDictionary dictionaryWithDictionary:dictionary];
             [mutable addEntriesFromDictionary:overrides];
